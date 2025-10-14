@@ -26,6 +26,10 @@ def generate_page(from_path, template_path, dest_path):
     html_file = template.replace("{{ Title }}", title)
     html_file = html_file.replace("{{ Content }}", content)
 
+    # Replace sources
+    html_file = html_file.replace("href=\"/", f"href=\"{from_path}")
+    html_file = html_file.replace("src=\"/", f"src=\"{from_path}")
+
     # Write html to destination
     # Make path if it doesn't exist
     if not os.path.exists(os.path.dirname(dest_path)):
