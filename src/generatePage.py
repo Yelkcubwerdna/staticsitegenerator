@@ -1,7 +1,7 @@
 from htmlnode import markdown_to_html_node, extract_title
 import os
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     # Print a message
     print(f"Generate page from {from_path} to {dest_path} using {template_path}")
 
@@ -27,8 +27,8 @@ def generate_page(from_path, template_path, dest_path):
     html_file = html_file.replace("{{ Content }}", content)
 
     # Replace sources
-    html_file = html_file.replace("href=\"/", f"href=\"{from_path}")
-    html_file = html_file.replace("src=\"/", f"src=\"{from_path}")
+    html_file = html_file.replace("href=\"/", f"href=\"{basepath}")
+    html_file = html_file.replace("src=\"/", f"src=\"{basepath}")
 
     # Write html to destination
     # Make path if it doesn't exist
@@ -39,7 +39,7 @@ def generate_page(from_path, template_path, dest_path):
     dest_file.write(html_file)
     dest_file.close()
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     # Print a message
     print(f"Generate page from {dir_path_content} to {dest_dir_path} using {template_path}")
 
@@ -51,7 +51,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
             content = os.path.join(dir_path_content, path)
             public = path.replace(".md", ".html")
             public = os.path.join(dest_dir_path, public)
-            generate_page(content, template_path, public)
+            generate_page(content, template_path, public, basepath)
         else:
             print(f"{path} is a directory")
-            generate_pages_recursive(os.path.join(dir_path_content, path), template_path, os.path.join(dest_dir_path, path))
+            generate_pages_recursive(os.path.join(dir_path_content, path), template_path, os.path.join(dest_dir_path, path), basepath)
